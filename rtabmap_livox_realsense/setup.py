@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 from glob import glob
 import os
 
-package_name = 'rtabmap_livox'
+package_name = 'rtabmap_livox_realsense'
 
 setup(
     name=package_name,
