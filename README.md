@@ -1,5 +1,5 @@
 # rtabmap_livox_realsense
-ROS 2 package to launch RTAB-Map with the Leo Rover simulation of SpaceR using a 3D LiDAR.
+ROS 2 package to launch RTAB-Map with the Leo Rover simulation of SpaceR using a 3D LiDAR and an RGB-D camera
 
 To install RTAB-Map on ROS 2 Humble, use the following command:
 
