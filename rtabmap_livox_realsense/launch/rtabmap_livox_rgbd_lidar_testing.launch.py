@@ -23,7 +23,7 @@ def generate_launch_description():
     deskewing = LaunchConfiguration('deskewing')
     
     # Open a Map Assembler node from the built from source version of rtabmap_util.
-    # This is a workarround until the node is included in the main installation of RTABAMP
+    # This is a workarround until the node is included in the main installation of RTABAMP for ROS2
     subprocess.Popen(
         ['gnome-terminal', '--', 'bash', '-c',
          """cd ~/rtabmap_util && source install/setup.bash && ros2 run rtabmap_util map_assembler --ros-args \
@@ -51,7 +51,7 @@ def generate_launch_description():
         
         SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time')),
         
-        # Nodes to launch
+        # # Nodes to launch
         Node(
             package='rtabmap_sync', executable='rgbd_sync', output='screen',
             parameters=[{
@@ -69,16 +69,17 @@ def generate_launch_description():
               # 'frame_id':f'{robot_namespace}/base_footprint',
               'frame_id': 'base_footprint',
               'subscribe_scan_cloud':True,
-              'subscribe_rgbd':True,
               'subscribe_depth': False,
+              'subscribe_rgbd':True,
               'approx_sync':True,
               'wait_for_transform':0.2,
-              'cloud_subtract_filtering': True,
-              'cloud_substract_filtering_min_neighbors': 2,
-              'gen_depth': True,
-              'gen_depth_decimation': 8,
-              'gen_depth_fill_holes_size':1,
-              # RTAB-Map's internal parameters are strings:
+              # 'cloud_subtract_filtering': True,
+              # 'cloud_substract_filtering_min_neighbors': 2,
+              # 'gen_depth': True,
+              # 'gen_depth_decimation': 8,
+              # 'gen_depth_fill_holes_size':1,
+              # RTAB-Map's internal parameters are strings:\
+              # 'RGBD/Enabled': 'true',
               'RGBD/ProximityMaxGraphDepth': '0',
               'RGBD/ProximityPathMaxNeighbors': '1',
               'RGBD/AngularUpdate': '0.05',
@@ -100,19 +101,21 @@ def generate_launch_description():
               'Icp/OutlierRatio': '0.7',
               'Icp/CorrespondenceRatio': '0.2',
               # Occupancy Grid / Map parameters
-              'RGBD/CreateOccupancyGrid': 'true',
-              'Grid/Sensor': '0',
-              # 'Grid/FootprintLengh':'0.1',
-              # 'Grid/FootprintWidth':'0.1',
-              # 'Grid/MaxObstacleHeight': '2.0',
-              # 'Grid/MinGrounHeight':'-0.4',
-              # 'Grid/MaxGroundHeight':'0.5',
-              # 'Grid/MaxGroundAngle':'45',
-              # 'Grid/ClusterRadious':'0.2',
-              # 'Grid/MinClusterSize':'5'
+                'RGBD/CreateOccupancyGrid': 'true',
+                'Grid/Sensor': '2',
+                # 'Grid/FromDepth': 'true',
+                # 'Grid/FootprintLengh':'0.1',
+                # 'Grid/FootprintWidth':'0.1',
+                # 'Grid/MaxObstacleHeight': '2.0',
+                # 'Grid/MinGrounHeight':'-0.4',
+                # 'Grid/MaxGroundHeight':'0.5',
+                # 'Grid/MaxGroundAngle':'45',
+                # 'Grid/ClusterRadious':'0.2',
+                # 'Grid/MinClusterSize':'5'
               }],
             remappings=[
               ('scan_cloud', 'assembled_cloud'),
+              # ('scan_cloud', '/points_color'),
             ],
             arguments=[
               '-d' # This will delete the previous database (~/.ros/rtabmap.db)
@@ -148,6 +151,7 @@ def generate_launch_description():
             }],
             remappings=[
               ('scan_cloud', f'{robot_namespace}/livox/lidar'),
+              # ('scan_cloud', '/points_color'),
             ]),
 
         Node(
@@ -182,7 +186,7 @@ def generate_launch_description():
               # 'frame_id':f'{robot_namespace}/base_footprint',
               'frame_id': 'base_footprint',
               'odom_frame_id':'odom',
-              'subscribe_rgbd':True,
+              # 'subscribe_rgbd':True,
               'subscribe_odom_info':True,
               'subscribe_scan_cloud':True,
               'approx_sync':False
