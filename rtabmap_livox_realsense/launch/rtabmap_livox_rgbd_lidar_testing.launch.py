@@ -73,6 +73,7 @@ def generate_launch_description():
               'subscribe_rgbd':True,
               'approx_sync':True,
               'wait_for_transform':0.2,
+              'map_always_update': True,
               # 'cloud_subtract_filtering': True,
               # 'cloud_substract_filtering_min_neighbors': 2,
               # 'gen_depth': True,
@@ -101,17 +102,19 @@ def generate_launch_description():
               'Icp/OutlierRatio': '0.7',
               'Icp/CorrespondenceRatio': '0.2',
               # Occupancy Grid / Map parameters
-                'RGBD/CreateOccupancyGrid': 'true',
-                'Grid/Sensor': '2',
-                # 'Grid/FromDepth': 'true',
-                # 'Grid/FootprintLengh':'0.1',
-                # 'Grid/FootprintWidth':'0.1',
-                # 'Grid/MaxObstacleHeight': '2.0',
-                # 'Grid/MinGrounHeight':'-0.4',
-                # 'Grid/MaxGroundHeight':'0.5',
-                # 'Grid/MaxGroundAngle':'45',
-                # 'Grid/ClusterRadious':'0.2',
-                # 'Grid/MinClusterSize':'5'
+              'RGBD/CreateOccupancyGrid': 'true',
+              'Grid/Sensor': '2',
+              'Grid/RangeMax': '10.0',
+              # 'Grid/FromDepth': 'true',
+              # 'Grid/FootprintLengh':'0.1',
+              # 'Grid/FootprintWidth':'0.1',
+              # 'Grid/MaxObstacleHeight': '2.0',
+              # 'Grid/MinGrounHeight':'-0.4',
+              # 'Grid/MaxGroundHeight':'0.5',
+              # 'Grid/MaxGroundAngle':'45',
+              # 'Grid/ClusterRadious':'0.2',
+              # 'Grid/MinClusterSize':'5'
+              
               }],
             remappings=[
               ('scan_cloud', 'assembled_cloud'),
