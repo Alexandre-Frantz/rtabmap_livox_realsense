@@ -33,23 +33,23 @@ def generate_launch_description():
         
         SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time')),
         
-        # Nodes to launch
-        Node(
-            package='rtabmap_sync', executable='rgb_sync', output='screen',
-            parameters=[{
-              'approx_sync':False
-            }],
-            remappings=[
-            #   ('/depth/image', f'{robot_namespace}/realsense_d455/camera_depth'), # /realsense_camera_leo04/realsense_camera_leo04/aligned_depth_to_color/image_raw'),
-              ('/rgb/camera_info' , f'{robot_namespace}/realsense_d455/camera_info'), #/realsense_camera_leo04/realsense_camera_leo04/color/camera_info'),
-              ('/rgb/image', f'{robot_namespace}/realsense_d455/camera_raw'), #/realsense_camera_leo04/realsense_camera_leo04/color/image_raw')
-            ]),
+        # # Nodes to launch
+        # Node(
+        #     package='rtabmap_sync', executable='rgb_sync', output='screen',
+        #     parameters=[{
+        #       'approx_sync':False
+        #     }],
+        #     remappings=[
+        #     #   ('/depth/image', f'{robot_namespace}/realsense_d455/camera_depth'), # /realsense_camera_leo04/realsense_camera_leo04/aligned_depth_to_color/image_raw'),
+        #       ('/rgb/camera_info' , f'{robot_namespace}/realsense_d455/camera_info'), #/realsense_camera_leo04/realsense_camera_leo04/color/camera_info'),
+        #       ('/rgb/image', f'{robot_namespace}/realsense_d455/camera_raw'), #/realsense_camera_leo04/realsense_camera_leo04/color/image_raw')
+        #     ]),
 
         Node(
             package='rtabmap_slam', executable='rtabmap', output='screen',
             parameters=[{
-              # 'frame_id':f'{robot_namespace}/base_footprint',
-              'frame_id': 'base_footprint',
+              'frame_id':f'{robot_namespace}/base_footprint',
+              # 'frame_id': 'base_footprint',
               'subscribe_scan_cloud':True,
               'subscribe_depth':False,
               'subscribe_rgb': False,
@@ -65,7 +65,7 @@ def generate_launch_description():
               'Mem/LaserScanNormalK': '20',
               'Reg/Strategy': '1',
               'Icp/VoxelSize': '0.1',
-              'Icp/RangeMin': '0.3', # Ignore laser scan points on the robot itself
+              'Icp/RangeMin': '0.0', # Ignore laser scan points on the robot itself
               'Icp/PointToPlaneK': '20',
               'Icp/PointToPlaneRadius': '0',
               'Icp/PointToPlane': 'true',
@@ -78,16 +78,18 @@ def generate_launch_description():
               'Icp/CorrespondenceRatio': '0.2',
               # Occupancy Grid / Map parameters
               'RGBD/CreateOccupancyGrid': 'true',
+              'Grid/CellSize': '0.05',
               'Grid/Sensor': '0',
               'Grid/MaxObstacleHeight': '2.0',
               'Grid/MinGrounHeight':'-0.4',
               'Grid/MaxGroundHeight':'0.07',
               'Grid/MaxGroundAngle':'45',
+              # 'Grid/RangeMax': '6.0',
               # 'Grid/ClusterRadious':'0.2',
               # 'Grid/MinClusterSize':'5'
               }],
             remappings=[
-              ('scan_cloud', '/points_color'),
+              ('scan_cloud', f'{robot_namespace}/points_color'),
             ],
             arguments=[
               '-d' # This will delete the previous database (~/.ros/rtabmap.db)
@@ -96,8 +98,8 @@ def generate_launch_description():
         Node(
             package='rtabmap_odom', executable='icp_odometry', output='screen',
             parameters=[{
-              # 'frame_id':f'{robot_namespace}/base_footprint',
-              'frame_id': 'base_footprint',
+              'frame_id':f'{robot_namespace}/base_footprint',
+              # 'frame_id': 'base_footprint',
               'odom_frame_id':'odom',
               'wait_for_transform':0.2,
               'expected_update_rate':15.0,
@@ -111,7 +113,7 @@ def generate_launch_description():
               'Icp/PointToPlaneRadius': '0',
               'Icp/MaxTranslation': '2',
               'Icp/MaxCorrespondenceDistance': '1',
-              'Icp/RangeMin': '0.3', # Ignore laser scan points on the robot itself
+              'Icp/RangeMin': '0.0', # Ignore laser scan points on the robot itself
               'Icp/Strategy': '1',
               'Icp/OutlierRatio': '0.7',
               'Icp/CorrespondenceRatio': '0.01',
@@ -138,7 +140,7 @@ def generate_launch_description():
         Node(
             package='rtabmap_viz', executable='rtabmap_viz', output='screen',
             parameters=[{
-              'frame_id': 'base_footprint',
+              'frame_id': f'{robot_namespace}/base_footprint',
               'odom_frame_id':'odom',
               'subscribe_odom_info':True,
               'subscribe_scan_cloud':True,
