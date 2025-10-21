@@ -15,8 +15,8 @@ from launch_ros.actions import SetParameter
 
 def generate_launch_description():
     
-    robot_namespace="leo04"
-
+    # robot_namespace="leo04"
+    robot_namespace = LaunchConfiguration('robot_namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
     deskewing = LaunchConfiguration('deskewing')
 
@@ -26,7 +26,12 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'use_sim_time', default_value='true',
             description='Use simulation (Gazebo) clock if true'),
-        
+  
+        DeclareLaunchArgument(
+            'robot_namespace', 
+            default_value='leo04',
+            description='The robot namespace'),
+
         DeclareLaunchArgument(
             'deskewing', default_value='false',
             description='Enable lidar deskewing'),
@@ -46,10 +51,11 @@ def generate_launch_description():
         #     ]),
 
         Node(
-            package='rtabmap_slam', executable='rtabmap', output='screen',
+            package='rtabmap_slam', executable='rtabmap', output='screen', namespace=robot_namespace,
             parameters=[{
-              'frame_id':f'{robot_namespace}/base_footprint',
-              # 'frame_id': 'base_footprint',
+              # 'frame_id':f'{robot_namespace}/base_footprint',
+              'frame_id' : [robot_namespace, '/base_footprint'],
+              'map_frame_id' : [robot_namespace, '/map'],
               'subscribe_scan_cloud':True,
               'subscribe_depth':False,
               'subscribe_rgb': False,
@@ -89,18 +95,20 @@ def generate_launch_description():
               # 'Grid/MinClusterSize':'5'
               }],
             remappings=[
-              ('scan_cloud', f'{robot_namespace}/points_color'),
+              # ('scan_cloud', f'{robot_namespace}/points_color'),
+              ('scan_cloud', 'points_color'),
+
             ],
             arguments=[
               '-d' # This will delete the previous database (~/.ros/rtabmap.db)
             ]), 
 
         Node(
-            package='rtabmap_odom', executable='icp_odometry', output='screen',
+            package='rtabmap_odom', executable='icp_odometry', output='screen', namespace=robot_namespace,
             parameters=[{
-              'frame_id':f'{robot_namespace}/base_footprint',
-              # 'frame_id': 'base_footprint',
-              'odom_frame_id':'odom',
+              # 'frame_id':f'{robot_namespace}/base_footprint',
+              'frame_id' : [robot_namespace, '/base_footprint'],
+              'odom_frame_id' : [robot_namespace, '/odom'],
               'wait_for_transform':0.2,
               'expected_update_rate':15.0,
               'deskewing':deskewing,
@@ -123,11 +131,12 @@ def generate_launch_description():
               'OdomF2M/BundleAdjustment': 'false',
             }],
             remappings=[
-              ('scan_cloud', f'{robot_namespace}/livox/lidar'),
+              # ('scan_cloud', f'{robot_namespace}/livox/lidar'),
+              ('scan_cloud', 'livox/lidar'),
             ]),
 
         Node(
-            package='rtabmap_util', executable='point_cloud_assembler', output='screen',
+            package='rtabmap_util', executable='point_cloud_assembler', output='screen', namespace=robot_namespace,
             parameters=[{
               'max_clouds':10,
               'fixed_frame_id':'',
@@ -137,16 +146,16 @@ def generate_launch_description():
               ('cloud', 'odom_filtered_input_scan')
             ]),
 
-        Node(
-            package='rtabmap_viz', executable='rtabmap_viz', output='screen',
-            parameters=[{
-              'frame_id': f'{robot_namespace}/base_footprint',
-              'odom_frame_id':'odom',
-              'subscribe_odom_info':True,
-              'subscribe_scan_cloud':True,
-              'approx_sync':False
-            }],
-            remappings=[
-               ('scan_cloud', 'odom_filtered_input_scan')
-            ]),
+        # Node(
+        #     package='rtabmap_viz', executable='rtabmap_viz', output='screen',
+        #     parameters=[{
+        #       'frame_id': f'{robot_namespace}/base_footprint',
+        #       'odom_frame_id':'odom',
+        #       'subscribe_odom_info':True,
+        #       'subscribe_scan_cloud':True,
+        #       'approx_sync':False
+        #     }],
+        #     remappings=[
+        #        ('scan_cloud', 'odom_filtered_input_scan')
+        #     ]),
     ])
