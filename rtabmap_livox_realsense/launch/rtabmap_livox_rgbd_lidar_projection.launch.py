@@ -84,13 +84,13 @@ def generate_launch_description():
               'Icp/CorrespondenceRatio': '0.2',
               # Occupancy Grid / Map parameters
               'RGBD/CreateOccupancyGrid': 'true',
-              'Grid/CellSize': '0.05',
+              'Grid/CellSize': '0.03',
               'Grid/Sensor': '0',
-              'Grid/MaxObstacleHeight': '2.0',
+              'Grid/MaxObstacleHeight': '1.0',
               'Grid/MinGrounHeight':'-0.4',
               'Grid/MaxGroundHeight':'0.07',
               'Grid/MaxGroundAngle':'45',
-              # 'Grid/RangeMax': '6.0',
+              # 'Grid/RangeMax': '2.5',
               # 'Grid/ClusterRadious':'0.2',
               # 'Grid/MinClusterSize':'5'
               }],
