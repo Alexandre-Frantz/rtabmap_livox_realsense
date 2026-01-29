@@ -49,7 +49,7 @@ With this package you can map using either the LiDAR or both LiDAR and RGB-D cam
 
 ## Mapping with LiDAR only
 
-To launch RTAB-MAP with the Livox MID 360 LiDAR and map an environment, execute the following commands
+To launch RTAB-MAP with the Livox MID 360 LiDAR and map an environment, execute either the following commands
 
 ```bash
 ros2 launch rtabmap_livox_realsense rtabmap_livox.launch.py # Without namespace
@@ -60,7 +60,7 @@ ros2 launch rtabmap_livox_realsense rtabmap_livox.launch.py robot_namespace:=<ro
 
 ## Mapping with LiDAR and RGB-D camera
 
-To launch RTAB-MAP with the Livox MID 360 LiDAR  and Realsense D455 and map an environment, execute the following commands
+To launch RTAB-MAP with the Livox MID 360 LiDAR  and Realsense D455 and map an environment, execute either the following commands
 
 ```bash
 ros2 launch rtabmap_livox_realsense rtabmap_livox_rgbd_lidar_projection.launch.py # without namespace
@@ -71,11 +71,11 @@ ros2 launch rtabmap_livox_realsense rtabmap_livox_rgbd_lidar_projection.launch.p
 
 ## Localizing your robot after a mapping session
 
-You can also localize your robot after having mapped an environment. Depending on what type of mapping you did you may launch the following commands
+You can also localize your robot after having mapped an environment. Depending on what type of mapping you did you may launch either of the following commands
 
 ```bash
-ros2 launch rtabmap_livox_realsense rtabmap_livox_localization.launch.py 
-ros2 launch rtabmap_livox_realsense rtabmap_livox_rgbd_lidar_projection_localization.launch.py 
+ros2 launch rtabmap_livox_realsense rtabmap_livox_localization.launch.py # mapping done with LiDAR only
+ros2 launch rtabmap_livox_realsense rtabmap_livox_rgbd_lidar_projection_localization.launch.py  # mapping done with LiDAR and RGB-D Camera
 ```
 
 You may also do this with namespaces if you have done your mapping with namespaces as well.
