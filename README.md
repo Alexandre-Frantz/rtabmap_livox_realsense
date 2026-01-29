@@ -92,4 +92,5 @@ ros2 launch rtabmap_livox_realsense custom_nav2_launch.py
 Should you encounter any issues, require assistance or want to reach out please contact me:
 
 Alexandre Frantz
+
 alexandre.frantz@uni.lu
