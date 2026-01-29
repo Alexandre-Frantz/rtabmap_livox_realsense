@@ -13,28 +13,29 @@ This package also provided an autonomous navigation option which can be used dur
 
 # Installation Instructions
 
-1. Install Required ROS2 Packages
+## Install Required ROS2 Packages
 
 The repository is based on ROS2 Humble, therefore please make sure you install this distro before using this [link](https://docs.ros.org/en/humble/index.html)
 
-**RTABMAP**
+1. **RTABMAP**
 
 ```bash
 sudo apt install ros-humble-rtabmap-ros  
 ```
 
-**Nav2**
+2. **Nav2**
 Please follow the instructions in this [link](https://docs.nav2.org/getting_started/index.html)
 
+## Clone and setup ROS2 workspace
 
-3. Clone the repository into your ROS2 workspace (or create a new one)
+1. Clone the repository into your ROS2 workspace (or create a new one)
 
 ```bash
 cd <your_ros2_ws>/src/
 git clone https://github.com/Alexandre-Frantz/rtabmap_livox_realsense.git
 ```
 
-3. Build and source your workspace
+2. Build and source your workspace
 
 ```bash
 cd <your_ros2_ws>
