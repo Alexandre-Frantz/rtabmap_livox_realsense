@@ -15,8 +15,8 @@ from launch_ros.actions import SetParameter
 
 def generate_launch_description():
     
-    robot_namespace="leo04"
-
+    # robot_namespace="leo04"
+    robot_namespace = LaunchConfiguration('robot_namespace')
     use_sim_time = LaunchConfiguration('use_sim_time')
     deskewing = LaunchConfiguration('deskewing')
 
@@ -26,7 +26,12 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'use_sim_time', default_value='true',
             description='Use simulation (Gazebo) clock if true'),
-        
+  
+        DeclareLaunchArgument(
+            'robot_namespace', 
+            default_value='leo04',
+            description='The robot namespace'),
+
         DeclareLaunchArgument(
             'deskewing', default_value='false',
             description='Enable lidar deskewing'),
@@ -46,10 +51,11 @@ def generate_launch_description():
         #     ]),
 
         Node(
-            package='rtabmap_slam', executable='rtabmap', output='screen',
+            package='rtabmap_slam', executable='rtabmap', output='screen', namespace=robot_namespace,
             parameters=[{
-              'frame_id':f'{robot_namespace}/base_footprint',
-              # 'frame_id': 'base_footprint',
+              # 'frame_id':f'{robot_namespace}/base_footprint',
+              'frame_id' : [robot_namespace, '/base_footprint'],
+              'map_frame_id' : [robot_namespace, '/map'],
               'subscribe_scan_cloud':True,
               'subscribe_depth':False,
               'subscribe_rgb': False,
@@ -64,8 +70,6 @@ def generate_launch_description():
               'Mem/STMSize': '30',
               'Mem/LaserScanNormalK': '20',
               'Reg/Strategy': '1',
-              'Mem/IncrementalMemory' : 'false', # localization
-              'Mem/InitWithAllNodes' : 'true',    # localization
               'Icp/VoxelSize': '0.1',
               'Icp/RangeMin': '0.0', # Ignore laser scan points on the robot itself
               'Icp/PointToPlaneK': '20',
@@ -78,32 +82,35 @@ def generate_launch_description():
               'Icp/Strategy': '1',
               'Icp/OutlierRatio': '0.7',
               'Icp/CorrespondenceRatio': '0.2',
+              'Mem/IncrementalMemory' : 'false', # localization
+              'Mem/InitWithAllNodes' : 'true',    # localization
               # Occupancy Grid / Map parameters
               'RGBD/CreateOccupancyGrid': 'true',
+              'Grid/CellSize': '0.03',
               'Grid/Sensor': '0',
-              # 'Grid/MaxObstacleHeight': '2.0',
-              # 'Grid/MinGrounHeight':'-0.4',
-              # 'Grid/MaxGroundHeight':'0.07',
-              # 'Grid/MaxGroundAngle':'45',
-              # 'Grid/MaxObstacleHeight': '1.5',
-              'Grid/MaxGroundAngle': '30',
-              'Grid/MinGroundHeight': '-0.5',
-              'Grid/MaxGroundHeight': '0.15',
-              'Grid/MinClusterSize': '15',
-            }],
+              'Grid/MaxObstacleHeight': '1.0',
+              'Grid/MinGrounHeight':'-0.4',
+              'Grid/MaxGroundHeight':'0.07',
+              'Grid/MaxGroundAngle':'45',
+              # 'Grid/RangeMax': '2.5',
+              # 'Grid/ClusterRadious':'0.2',
+              # 'Grid/MinClusterSize':'5'
+              }],
             remappings=[
-              ('scan_cloud', f'{robot_namespace}/points_color'),
+              # ('scan_cloud', f'{robot_namespace}/points_color'),
+              ('scan_cloud', 'points_color'),
+
             ],
             arguments=[
-              # '-d' # This will delete the previous database (~/.ros/rtabmap.db)
+              #'-d' # This will delete the previous database (~/.ros/rtabmap.db)
             ]), 
 
         Node(
-            package='rtabmap_odom', executable='icp_odometry', output='screen',
+            package='rtabmap_odom', executable='icp_odometry', output='screen', namespace=robot_namespace,
             parameters=[{
-              'frame_id':f'{robot_namespace}/base_footprint',
-              # 'frame_id': 'base_footprint',
-              'odom_frame_id':'odom',
+              # 'frame_id':f'{robot_namespace}/base_footprint',
+              'frame_id' : [robot_namespace, '/base_footprint'],
+              'odom_frame_id' : [robot_namespace, '/odom'],
               'wait_for_transform':0.2,
               'expected_update_rate':15.0,
               'deskewing':deskewing,
@@ -126,11 +133,12 @@ def generate_launch_description():
               'OdomF2M/BundleAdjustment': 'false',
             }],
             remappings=[
-              ('scan_cloud', f'{robot_namespace}/livox/lidar'),
+              # ('scan_cloud', f'{robot_namespace}/livox/lidar'),
+              ('scan_cloud', 'livox/lidar'),
             ]),
 
         Node(
-            package='rtabmap_util', executable='point_cloud_assembler', output='screen',
+            package='rtabmap_util', executable='point_cloud_assembler', output='screen', namespace=robot_namespace,
             parameters=[{
               'max_clouds':10,
               'fixed_frame_id':'',
@@ -140,16 +148,16 @@ def generate_launch_description():
               ('cloud', 'odom_filtered_input_scan')
             ]),
 
-        Node(
-            package='rtabmap_viz', executable='rtabmap_viz', output='screen',
-            parameters=[{
-              'frame_id': 'base_footprint',
-              'odom_frame_id':'odom',
-              'subscribe_odom_info':True,
-              'subscribe_scan_cloud':True,
-              'approx_sync':False
-            }],
-            remappings=[
-               ('scan_cloud', 'odom_filtered_input_scan')
-            ]),
+        # Node(
+        #     package='rtabmap_viz', executable='rtabmap_viz', output='screen',
+        #     parameters=[{
+        #       'frame_id': f'{robot_namespace}/base_footprint',
+        #       'odom_frame_id':'odom',
+        #       'subscribe_odom_info':True,
+        #       'subscribe_scan_cloud':True,
+        #       'approx_sync':False
+        #     }],
+        #     remappings=[
+        #        ('scan_cloud', 'odom_filtered_input_scan')
+        #     ]),
     ])
