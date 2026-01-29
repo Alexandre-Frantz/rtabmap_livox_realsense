@@ -38,18 +38,6 @@ def generate_launch_description():
         
         SetParameter(name='use_sim_time', value=LaunchConfiguration('use_sim_time')),
         
-        # # Nodes to launch
-        # Node(
-        #     package='rtabmap_sync', executable='rgb_sync', output='screen',
-        #     parameters=[{
-        #       'approx_sync':False
-        #     }],
-        #     remappings=[
-        #     #   ('/depth/image', f'{robot_namespace}/realsense_d455/camera_depth'), # /realsense_camera_leo04/realsense_camera_leo04/aligned_depth_to_color/image_raw'),
-        #       ('/rgb/camera_info' , f'{robot_namespace}/realsense_d455/camera_info'), #/realsense_camera_leo04/realsense_camera_leo04/color/camera_info'),
-        #       ('/rgb/image', f'{robot_namespace}/realsense_d455/camera_raw'), #/realsense_camera_leo04/realsense_camera_leo04/color/image_raw')
-        #     ]),
-
         Node(
             package='rtabmap_slam', executable='rtabmap', output='screen', namespace=robot_namespace,
             parameters=[{
@@ -146,6 +134,8 @@ def generate_launch_description():
               ('cloud', 'odom_filtered_input_scan')
             ]),
 
+
+        # Uncomment this to show the RTAB-MAP GUI 
         # Node(
         #     package='rtabmap_viz', executable='rtabmap_viz', output='screen',
         #     parameters=[{
