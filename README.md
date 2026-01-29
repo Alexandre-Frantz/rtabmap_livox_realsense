@@ -1,14 +1,71 @@
 # rtabmap_livox_realsense
-ROS 2 package to launch RTAB-Map with the Leo Rover simulation of SpaceR using a 3D LiDAR and an RGB-D camera
+ROS 2 package that launches SLAM using RTAB-Map using the Leo Rover simulation of SpaceR. Mapping is possible using:
 
-To install RTAB-Map on ROS 2 Humble, use the following command:
+1. 3D LiDAR only
+2. Fused 3D LiDAR and RGB-D camera. The 3D LiDAR cloud is colored using RGB values from the RGB-D camera
+
+The sensors used are the following:
+
+1. 3D LiDAR -> Livox MID 360
+2. RGB-D Camera -> Realsense D455 RGB-D Camera
+
+# Installation Instructions
+
+1. Clone the repository into your ROS2 workspace (or create a new one)
 
 ```bash
-sudo apt install ros-humble-rtabmap-ros
+cd <your_ros2_ws>/src/
+git clone https://github.com/Alexandre-Frantz/rtabmap_livox_realsense.git
 ```
 
-To run RTAB-Map with the Livox MID 360 LiDAR and a Realsense D-series camera, or the simulated sensors in Gazebo, in combination with the Leo Rover, run the following command:
+2. Build and source your workspace
 
 ```bash
-ros2 launch rtabmap_livox_realsense rtabmap_livox_rgbd_lidar.launch.py
+cd <your_ros2_ws>
+colcon build --symlink-install
+source install/setup.bash
 ```
+
+# Environment Mapping
+
+With this package you can map using either the LiDAR or both LiDAR and RGB-D camera. Depending on your needs, the former produces a 3D point cloud with ground/obstacle segmentation, whereas the latter produces a colored point cloud.
+
+## Mapping with LiDAR only
+
+To launch RTAB-MAP with the Livox MID 360 LiDAR and map an environment, execute the following commands
+
+```bash
+ros2 launch rtabmap_livox_realsense rtabmap_livox.launch.py # Without namespace
+ros2 launch rtabmap_livox_realsense rtabmap_livox.launch.py robot_namespace:=<robot_ns> # With namespace
+```
+
+> Note: RTABMAP saves a database file (rtabmap.db) under `.ros`. This file can be used for a future mapping session or to localize your robot in a previously mapped environment.
+
+## Mapping with LiDAR and RGB-D camera
+
+To launch RTAB-MAP with the Livox MID 360 LiDAR  and Realsense D455 and map an environment, execute the following commands
+
+```bash
+ros2 launch rtabmap_livox_realsense rtabmap_livox_rgbd_lidar_projection.launch.py # without namespace
+ros2 launch rtabmap_livox_realsense rtabmap_livox_rgbd_lidar_projection.launch.py robot_namespace:=<robot_ns> # with namespace
+```
+
+> Note: RTABMAP saves a database file (rtabmap.db) under `.ros`. This file can be used for a future mapping session or to localize your robot in a previously mapped environment.
+
+## Localizing your robot after a mapping session
+
+You can also localize your robot after having mapped an environment. Depending on what type of mapping you did you may launch the following commands
+
+```bash
+ros2 launch rtabmap_livox_realsense rtabmap_livox_localization.launch.py 
+ros2 launch rtabmap_livox_realsense rtabmap_livox_rgbd_lidar_projection_localization.launch.py 
+```
+
+You may also do this with namespaces if you have done your mapping with namespaces as well.
+
+
+# Contact information
+Should you encounter any issues, require assistance or want to reach out please contact me:
+
+Alexandre Frantz
+alexandre.frantz@uni.lu
