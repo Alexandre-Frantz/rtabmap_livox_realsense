@@ -29,6 +29,11 @@ def generate_launch_description():
     
     nav2_bringup_dir = get_package_share_directory('nav2_bringup')
     nav2_launch_file = os.path.join(nav2_bringup_dir, 'launch', 'navigation_launch.py')
+    
+    rtabmap_livox_realsnse_pkg_share = get_package_share_directory("rtabmap_livox_realsense")
+    default_params_file = os.path.join(
+        rtabmap_livox_realsnse_pkg_share, "config_files", "nav2_params_repo.yaml"
+    )
 
     # Launch-time args
     params_file = LaunchConfiguration('params_file')
@@ -39,13 +44,14 @@ def generate_launch_description():
         
         DeclareLaunchArgument(
             'params_file',
-            default_value='/home/xr-dev/ros2_ws/config_files/nav2_params_repo.yaml'
+            default_value=default_params_file,
+            description='Nav2 params file'
         ),
         DeclareLaunchArgument(
             'cmd_vel_out',
-            default_value='/leo04/cmd_vel'
+            default_value='/leo04/cmd_vel',
+            description='remapped topic for cmd_vel'
         ),
-
         DeclareLaunchArgument(
             'use_sim_time',                     
             default_value='true',               # true for Gazebo; set to 'false' on real robot
