@@ -13,7 +13,7 @@ This package also provided an autonomous navigation option which can be used dur
 
 # Installation Instructions
 
-The repository is based on ROS2 Humble, therefore please make sure you install this distro before using this [link](https://docs.ros.org/en/humble/index.html)
+The repository is based on ROS2 Humble, therefore please make sure you install this distro first, using this [link](https://docs.ros.org/en/humble/index.html)
 
 ## Install Required ROS2 Packages
 
