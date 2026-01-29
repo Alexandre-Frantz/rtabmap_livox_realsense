@@ -1,5 +1,5 @@
 # rtabmap_livox_realsense
-ROS 2 package that launches SLAM using RTAB-Map using the Leo Rover simulation of SpaceR. Mapping is possible using:
+ROS 2 package that launches SLAM using RTAB-Map using a Gazebo [Leo Rover simulation](https://github.com/Alexandre-Frantz/leo_simulator-ros2). Mapping is possible using:
 
 1. 3D LiDAR only
 2. Fused 3D LiDAR and RGB-D camera. The 3D LiDAR cloud is colored using RGB values from the RGB-D camera
@@ -9,16 +9,32 @@ The sensors used are the following:
 1. 3D LiDAR -> Livox MID 360
 2. RGB-D Camera -> Realsense D455 RGB-D Camera
 
+This package also provided an autonomous navigation option which can be used during and after SLAM. This feature is based on Nav2.
+
 # Installation Instructions
 
-1. Clone the repository into your ROS2 workspace (or create a new one)
+1. Install Required ROS2 Packages
+
+The repository is based on ROS2 Humble, therefore please make sure you install this distro before using this [link](https://docs.ros.org/en/humble/index.html)
+
+**RTABMAP**
+
+```bash
+sudo apt install ros-humble-rtabmap-ros  
+```
+
+**Nav2**
+Please follow the instructions in this [link](https://docs.nav2.org/getting_started/index.html)
+
+
+3. Clone the repository into your ROS2 workspace (or create a new one)
 
 ```bash
 cd <your_ros2_ws>/src/
 git clone https://github.com/Alexandre-Frantz/rtabmap_livox_realsense.git
 ```
 
-2. Build and source your workspace
+3. Build and source your workspace
 
 ```bash
 cd <your_ros2_ws>
@@ -63,6 +79,13 @@ ros2 launch rtabmap_livox_realsense rtabmap_livox_rgbd_lidar_projection_localiza
 
 You may also do this with namespaces if you have done your mapping with namespaces as well.
 
+# Autonomous Navigation
+
+To launch Nav2 execute the following:
+
+```bash
+ros2 launch rtabmap_livox_realsense custom_nav2_launch.py
+```
 
 # Contact information
 Should you encounter any issues, require assistance or want to reach out please contact me:
