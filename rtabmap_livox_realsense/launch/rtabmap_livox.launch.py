@@ -1,11 +1,21 @@
+#!/usr/bin/env python3
+"""
+rtabmap_livox.launch.py
 
-# Example:
-#   $ ros2 launch velodyne_driver velodyne_driver_node-VLP16-launch.py
-#   $ ros2 launch velodyne_pointcloud velodyne_transform_node-VLP16-launch.py
-#
-#   SLAM:
-#   $ ros2 launch rtabmap_examples vlp16.launch.py
+SLAM mapping using RTAB-MAP on a Leo Rover equiped with a Livox MID 360 LiDAR 
 
+Usage:
+
+    ros2 launch rtabmap_livox_realsense rtabmap_livox.launch
+
+Notes:
+    - Use the --show-args command when launching the file to see launch parameters
+
+
+Author: Alexandre Frantz
+Created: 2026-01-29
+Updated: 2026-01-29
+"""
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument

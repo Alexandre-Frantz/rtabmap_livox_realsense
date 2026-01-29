@@ -1,3 +1,22 @@
+#!/usr/bin/env python3
+"""
+custom_nav2_launch.py
+
+Nav2 with SLAM mapping/localization using RTAB-MAP on a Leo Rover. 
+
+Usage:
+
+    ros2 launch rtabmap_livox_realsense custom_nav2_launch.py
+
+Notes:
+    - Use the --show-args command when launching the file to see launch parameters
+
+
+Author: Alexandre Frantz
+Created: 2026-01-29
+Updated: 2026-01-29
+"""
+
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
