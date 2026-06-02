@@ -23,6 +23,7 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.actions import SetParameter
 
+
 def generate_launch_description():
     
     # robot_namespace="leo04"
@@ -88,6 +89,8 @@ def generate_launch_description():
               'Grid/MinGrounHeight':'-0.4',
               'Grid/MaxGroundHeight':'0.07',
               'Grid/MaxGroundAngle':'45',
+              'Grid/RangeMin' : '0.7',
+              'Grid/RangeMax' : '3',
               # 'Grid/RangeMax': '2.5',
               # 'Grid/ClusterRadious':'0.2',
               # 'Grid/MinClusterSize':'5'
