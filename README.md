@@ -88,6 +88,31 @@ To launch Nav2 execute the following:
 ros2 launch rtabmap_livox_realsense custom_nav2_launch.py
 ```
 
+## Namespaced Nav2 (multi-robot)
+
+For multi-robot operation each robot runs its own fully namespaced Nav2 stack using
+`custom_nav2_namespaced_launch.py`. It launches the Nav2 nodes directly under a
+`PushRosNamespace`, so all topics and TF frames are scoped to the robot:
+
+```bash
+ros2 launch rtabmap_livox_realsense custom_nav2_namespaced_launch.py robot_namespace:=leo04
+ros2 launch rtabmap_livox_realsense custom_nav2_namespaced_launch.py robot_namespace:=leo05
+```
+
+Launch arguments:
+  * `robot_namespace`: robot namespace, must match the RTAB-Map launch (default: `leo04`)
+  * `use_sim_time`: use the Gazebo clock (default: `true`; set `false` on the real robot)
+  * `params_file`: Nav2 params YAML (default: `config_files/nav2_params_repo.yaml`)
+  * `autostart`: auto-activate the Nav2 lifecycle nodes (default: `true`)
+
+Notes:
+  * The params file uses `leo04` as a namespace placeholder; it is replaced with
+    `robot_namespace` at launch time, so a single YAML works for every robot.
+  * RTAB-Map publishes namespaced TF frames (e.g. `leo04/odom`) to the global `/tf`,
+    so Nav2 subscribes to the global `/tf` (no `/tf` remapping).
+  * To send goals from RViz, set the **2D Goal Pose** tool topic to `/<robot_namespace>/goal_pose`
+    (RViz → Tool Properties), otherwise the default `/goal_pose` will not reach `bt_navigator`.
+
 # Contact information
 Should you encounter any issues, require assistance or want to reach out please contact me:
 
